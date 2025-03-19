@@ -1,67 +1,96 @@
 import React from 'react';
+import { Typography, Divider } from 'antd';
+
+const { Title, Paragraph, Text } = Typography;
 
 const About: React.FC = () => {
-    return (
-        <>
-            <h1>About Page</h1>
+  return (
+    <div
+      style={{
+        padding: '24px',
+        marginTop: '80px',
+        backgroundColor: '#fff',
+        color: '#000',
+        borderRadius: '8px',
+        maxWidth: '1000px',
+        margin: '80px auto 24px auto',
+      }}
+    >
+      <Typography style={{ color: '#000', textAlign: 'center' }}>
+        <Title>About Page</Title>
+        <Divider />
 
-            <h2><u>Our Mission</u></h2>
-            <p>
-            Spark Bytes is dedicated to addressing two important challenges at Boston University: <br />
-            reducing food waste from campus events and helping BU community members access free food resources
-            </p>
+        <Title level={2}>Our Mission</Title>
+        <Paragraph>
+          Spark Bytes is dedicated to addressing two important challenges at Boston University:
+          <br />
+          reducing food waste from campus events and helping BU community members access free food resources.
+        </Paragraph>
+        <Divider />
 
-            <h2><u>What We Do</u></h2>
-            <p>
-            Every day across Boston University's campus, numerous events provide food and refreshments. Often, these events <br />
-            end with surplus food that goes to waste. Meanwhile, many students and staff members could benefit from access to these unused resources.
-            </p>
+        <Title level={2}>What We Do</Title>
+        <Paragraph>
+          Every day across Boston University's campus, numerous events provide food and refreshments. Often, these events
+          <br />
+          end with surplus food that goes to waste. Meanwhile, many students and staff members could benefit from access to these unused resources.
+        </Paragraph>
+        <Paragraph>Spark Bytes bridges this gap by:</Paragraph>
+        <Paragraph style={{ margin: '8px 0' }}>
+          • <Text strong>Connecting the BU community with available food resources</Text> – Our platform displays real-time information about events with available food, including what's being served and how much is left.
+        </Paragraph>
+        <Paragraph style={{ margin: '8px 0' }}>
+          • <Text strong>Reducing campus food waste</Text> – By redirecting surplus food to those who can use it, we help decrease the environmental impact of food waste at BU.
+        </Paragraph>
+        <Paragraph style={{ margin: '8px 0' }}>
+          • <Text strong>Creating a more sustainable campus</Text> – We track and display metrics on food waste reduction, helping event organizers make more informed decisions about quantities.
+        </Paragraph>
+        <Divider />
 
-            <p>
-            Spark Bytes bridges this gap by: <br />
-            <ul>
-                <li>
-                    <b>Connecting the BU community with available food resources</b> - Our platform displays real-time information about events <br />
-                    with available food, including what's being served and how much is left.
-                </li>
-                <li>
-                    <b>Reducing campus food waste</b> - By redirecting surplus food to those who can use it, we help decrease the envrionmental <br />
-                    impact of food waste at BU.
-                </li>
-                <li>
-                    <b>Creating a more sustainable campus</b> - We track and display metrics on food waste reduction, helping event organizers  <br />
-                    make more informed decisions about quantities.
-                </li>
-            </ul>
-            </p>
+        <Title level={2}>How It Works</Title>
+        <Title level={3}>For Event Hosts</Title>
+        <Paragraph style={{ margin: '8px 0' }}>
+          • Easily create listings for events with food
+        </Paragraph>
+        <Paragraph style={{ margin: '8px 0' }}>
+          • Upload images and descriptions of available food items
+        </Paragraph>
+        <Paragraph style={{ margin: '8px 0' }}>
+          • Update food availability in real-time
+        </Paragraph>
+        <Paragraph style={{ margin: '8px 0' }}>
+          • Track attendance and engagement through check-ins
+        </Paragraph>
+        <Paragraph style={{ margin: '8px 0' }}>
+          • View impact metrics showing how your events help reduce food waste
+        </Paragraph>
+        <Title level={3} style={{ marginTop: '24px' }}>For Food Seekers</Title>
+        <Paragraph style={{ margin: '8px 0' }}>
+          • Browse upcoming events with available food
+        </Paragraph>
+        <Paragraph style={{ margin: '8px 0' }}>
+          • Filter events based on dietary preferences and restrictions
+        </Paragraph>
+        <Paragraph style={{ margin: '8px 0' }}>
+          • Receive timely notifications about food availability
+        </Paragraph>
+        <Paragraph style={{ margin: '8px 0' }}>
+          • Get directions to event locations through integrated maps
+        </Paragraph>
+        <Paragraph style={{ margin: '8px 0' }}>
+          • Provide feedback on events to improve the community experience
+        </Paragraph>
+        <Divider />
 
-            <h2><u>How It Works</u></h2>
-            <h3>For Event Hosts</h3>
-            <p>
-                <ul>
-                    <li>Easily create listings for events with food</li>
-                    <li>Upload images and descriptions of available food items</li>
-                    <li>Update food availability in real-time</li>
-                    <li>Track attendance and engagement through check-ins</li>
-                    <li>View impact metrics showing how your events help reduce food waste</li>
-                </ul>
-            </p>
-            <h3>For Food Seekers</h3>
-            <p>
-                <ul>
-                    <li>Browse upcoming events with available food</li>
-                    <li>Filter events based on dietary preferences and restrictions</li>
-                    <li>Receive timely notifications about food availability</li>
-                    <li>Get directions to event locations through integrated maps</li>
-                    <li>Provide feedback on events to improve the community experience</li>
-                </ul>
-            </p>
-
-            <h2><u>Join Us</u></h2>
-            <p>Whether you're hosting an event or looking for a quick bite, Spark Bytes helps create a more connected and sustainable BU community</p>
-            <p><i>SparkBytes is a project developed by students in CS391 at Boston University</i></p>
-        </>
-    );
+        <Title level={2}>Join Us</Title>
+        <Paragraph>
+          Whether you're hosting an event or looking for a quick bite, Spark Bytes helps create a more connected and sustainable BU community.
+        </Paragraph>
+        <Paragraph>
+          <i>SparkBytes is a project developed by students in CS391 at Boston University</i>
+        </Paragraph>
+      </Typography>
+    </div>
+  );
 };
 
 export default About;

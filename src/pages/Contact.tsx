@@ -4,7 +4,7 @@ const Contact: React.FC = () => {
     return (
         <>
             <h1>Contact Page</h1>
-            <p></p>
+            <p>Contact us at <strong>sparkbites@bu.edu</strong></p>
         </>
     );
 };
