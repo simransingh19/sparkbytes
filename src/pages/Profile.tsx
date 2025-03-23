@@ -67,21 +67,23 @@ const Profile: React.FC = () => {
         return (
             <>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Card style={{ margin: '2vw' }}>
-                        <Paragraph>
-                            If you have an account:
-                        </Paragraph>
-                        <Button onClick={signInWithGoogle}>
-                            Login with Google
-                        </Button>
-                    </Card>
-                    <Card style={{ margin: '2vw' }}>
-                        <Paragraph>
-                            First time here?
-                        </Paragraph>
-                        <Button onClick={signInWithGoogle}>
-                            Sign Up with Google
-                        </Button>
+                    <Card>
+                        <Card style={{ margin: '2vw' }}>
+                            <Paragraph>
+                                If you have an account:
+                            </Paragraph>
+                            <Button onClick={signInWithGoogle}>
+                                Login with Google
+                            </Button>
+                        </Card>
+                        <Card style={{ margin: '2vw' }}>
+                            <Paragraph>
+                                First time here?
+                            </Paragraph>
+                            <Button onClick={signInWithGoogle}>
+                                Sign Up with Google
+                            </Button>
+                        </Card>
                     </Card>
                 </div>
             </>
