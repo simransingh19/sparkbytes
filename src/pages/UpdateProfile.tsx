@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Form, Input, Button, Select } from 'antd';
+import { Card, Form, Input, Button, Select, Switch } from 'antd';
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { getAuth, User, onAuthStateChanged } from 'firebase/auth';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -20,6 +20,7 @@ interface ProfileData {
     addresses: Address[];
     dietaryRestrictions: string[];
     foodPreferences: string[];
+    notifications: boolean;
 }
 
 const UpdateProfile: React.FC = () => {
@@ -45,12 +46,14 @@ const UpdateProfile: React.FC = () => {
                             : [],
                         dietaryRestrictions: data.UserData?.DietaryRestrictions || [],
                         foodPreferences: data.UserData?.FoodPreferences || [],
+                        notifications: data.UserData?.Notifications || false,
                     };
                     form.setFieldsValue({
                         profileType: fetchedProfile.profileType,
                         addresses: fetchedProfile.addresses,
                         dietaryRestrictions: fetchedProfile.dietaryRestrictions,
                         foodPreferences: fetchedProfile.foodPreferences,
+                        notifications: fetchedProfile.notifications,
                     });
                 }
             }
@@ -76,6 +79,7 @@ const UpdateProfile: React.FC = () => {
                 addresses: cleanedAddresses,
                 dietaryRestrictions: values.dietaryRestrictions || [],
                 foodPreferences: values.foodPreferences || [],
+                notifications: values.notifications || false,
             };
 
             console.log('Updated Data:', updatedData);
@@ -87,9 +91,9 @@ const UpdateProfile: React.FC = () => {
                     Addresses: updatedData.addresses,
                     DietaryRestrictions: updatedData.dietaryRestrictions,
                     FoodPreferences: updatedData.foodPreferences,
+                    Notifications: updatedData.notifications,
                 },
             };
-
 
             await setDoc(userDocRef, dataToSave, { merge: true });
             alert('Profile updated successfully!');
@@ -102,113 +106,120 @@ const UpdateProfile: React.FC = () => {
     };
 
     return (
-        <div style = {{padding: "10vh"}} >
-        <Card style={{ width: 500, margin: '0 auto' }}>
-            <Form form={form} layout="vertical" onFinish={handleSubmit}>
-                <Form.Item label="Account Type" name="profileType" rules={[{ required: true }]}>
-                    <Select placeholder="Select Account Type">
-                        <Select.Option value="Attendee">Attendee</Select.Option>
-                        <Select.Option value="Host">Host</Select.Option>
-                    </Select>
-                </Form.Item>
-                <Form.List name="addresses">
-                    {(fields, { add, remove }) => (
-                        <>
-                            {fields.map((field) => (
-                                <Card key={field.key} type="inner" style={{ marginBottom: '1rem' }}>
-                                    <Form.Item
-                                        {...field}
-                                        label="Street Number & Name"
-                                        name={[field.name, 'street']}
-                                        rules={[{ required: true, message: 'Please enter street number and name.' }]}
-                                    >
-                                        <Input placeholder="e.g., 123 Main St" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        {...field}
-                                        label="Apartment/Unit"
-                                        name={[field.name, 'apt']}
-                                    >
-                                        <Input placeholder="Apartment or Unit (optional)" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        {...field}
-                                        label="City"
-                                        name={[field.name, 'city']}
-                                        rules={[{ required: true, message: 'Please enter a city.' }]}
-                                    >
-                                        <Input placeholder="City" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        {...field}
-                                        label="State"
-                                        name={[field.name, 'state']}
-                                        rules={[{ required: true, message: 'Please enter a state.' }]}
-                                    >
-                                        <Input placeholder="State" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        {...field}
-                                        label="Zipcode"
-                                        name={[field.name, 'zipcode']}
-                                        rules={[{ required: true, message: 'Please enter a zipcode.' }]}
-                                    >
-                                        <Input placeholder="Zipcode" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        {...field}
-                                        label="Country"
-                                        name={[field.name, 'country']}
-                                        rules={[{ required: true, message: 'Please enter a country.' }]}
-                                    >
-                                        <Input placeholder="Country" />
-                                    </Form.Item>
-                                    <Button type="link" onClick={() => remove(field.name)}>
-                                        Remove Address
+        <div style={{ padding: "10vh" }}>
+            <Card style={{ width: 500, margin: '0 auto' }}>
+                <Form form={form} layout="vertical" onFinish={handleSubmit}>
+                    <Form.Item label="Account Type" name="profileType" rules={[{ required: true }]}>
+                        <Select placeholder="Select Account Type">
+                            <Select.Option value="Attendee">Attendee</Select.Option>
+                            <Select.Option value="Host">Host</Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.List name="addresses">
+                        {(fields, { add, remove }) => (
+                            <>
+                                {fields.map((field) => (
+                                    <Card key={field.key} type="inner" style={{ marginBottom: '1rem' }}>
+                                        <Form.Item
+                                            {...field}
+                                            label="Street Number & Name"
+                                            name={[field.name, 'street']}
+                                            rules={[{ required: true, message: 'Please enter street number and name.' }]}
+                                        >
+                                            <Input placeholder="e.g., 123 Main St" />
+                                        </Form.Item>
+                                        <Form.Item
+                                            {...field}
+                                            label="Apartment/Unit"
+                                            name={[field.name, 'apt']}
+                                        >
+                                            <Input placeholder="Apartment or Unit (optional)" />
+                                        </Form.Item>
+                                        <Form.Item
+                                            {...field}
+                                            label="City"
+                                            name={[field.name, 'city']}
+                                            rules={[{ required: true, message: 'Please enter a city.' }]}
+                                        >
+                                            <Input placeholder="City" />
+                                        </Form.Item>
+                                        <Form.Item
+                                            {...field}
+                                            label="State"
+                                            name={[field.name, 'state']}
+                                            rules={[{ required: true, message: 'Please enter a state.' }]}
+                                        >
+                                            <Input placeholder="State" />
+                                        </Form.Item>
+                                        <Form.Item
+                                            {...field}
+                                            label="Zipcode"
+                                            name={[field.name, 'zipcode']}
+                                            rules={[{ required: true, message: 'Please enter a zipcode.' }]}
+                                        >
+                                            <Input placeholder="Zipcode" />
+                                        </Form.Item>
+                                        <Form.Item
+                                            {...field}
+                                            label="Country"
+                                            name={[field.name, 'country']}
+                                            rules={[{ required: true, message: 'Please enter a country.' }]}
+                                        >
+                                            <Input placeholder="Country" />
+                                        </Form.Item>
+                                        <Button type="link" onClick={() => remove(field.name)}>
+                                            Remove Address
+                                        </Button>
+                                    </Card>
+                                ))}
+                                <Form.Item>
+                                    <Button type="dashed" onClick={() => add()} block>
+                                        Add Address
                                     </Button>
-                                </Card>
-                            ))}
-                            <Form.Item>
-                                <Button type="dashed" onClick={() => add()} block>
-                                    Add Address
-                                </Button>
-                            </Form.Item>
-                        </>
-                    )}
-                </Form.List>
-                <Form.Item label="Dietary Restrictions" name="dietaryRestrictions">
-                    <Select mode="multiple" placeholder="Select food preferences" allowClear>
-                        <Option value="Vegetarian">Vegetarian</Option>
-                        <Option value="Vegan">Vegan</Option>
-                        <Option value="Gluten Free">Gluten Free</Option>
-                        <Option value="Lactose Free">Lactose Free</Option>
-                        <Option value="Halal">Halal</Option>
-                        <Option value="Kosher">Kosher</Option>
-                        <Option value="Nut Allergy">Nut Allergy</Option>
-                        <Option value="Fish Allergy">Fish Allergy</Option>
-                        <Option value="Shellfish Allergy">Shellfish Allergy</Option>
-                        <Option value="Soy Allergy">Soy Allergy</Option>
-                        <Option value="Pescatarian">Pescatarian</Option>
-                        <Option value="Wheat Allergy">Wheat Allergy</Option>
-                        <Option value="Egg Free">Egg Free</Option>
-                        <Option value="Paleo Diet">Paleo Diet</Option>
-                        <Option value="Keto Diet">Meals</Option>
-                    </Select>
-                </Form.Item>
-                <Form.Item label="Food Preferences" name="foodPreferences">
-                    <Select mode="multiple" placeholder="Select food preferences" allowClear>
-                        <Option value="Snacks">Snacks</Option>
-                        <Option value="Small Bites">Small Bites</Option>
-                        <Option value="Meals">Meals</Option>
-                    </Select>
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" loading={loading}>
-                        Update Profile
-                    </Button>
-                </Form.Item>
-            </Form>
-        </Card>
+                                </Form.Item>
+                            </>
+                        )}
+                    </Form.List>
+                    <Form.Item label="Dietary Restrictions" name="dietaryRestrictions">
+                        <Select mode="multiple" placeholder="Select food preferences" allowClear>
+                            <Option value="Vegetarian">Vegetarian</Option>
+                            <Option value="Vegan">Vegan</Option>
+                            <Option value="Gluten Free">Gluten Free</Option>
+                            <Option value="Lactose Free">Lactose Free</Option>
+                            <Option value="Halal">Halal</Option>
+                            <Option value="Kosher">Kosher</Option>
+                            <Option value="Nut Allergy">Nut Allergy</Option>
+                            <Option value="Fish Allergy">Fish Allergy</Option>
+                            <Option value="Shellfish Allergy">Shellfish Allergy</Option>
+                            <Option value="Soy Allergy">Soy Allergy</Option>
+                            <Option value="Pescatarian">Pescatarian</Option>
+                            <Option value="Wheat Allergy">Wheat Allergy</Option>
+                            <Option value="Egg Free">Egg Free</Option>
+                            <Option value="Paleo Diet">Paleo Diet</Option>
+                            <Option value="Keto Diet">Keto Diet</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item label="Food Preferences" name="foodPreferences">
+                        <Select mode="multiple" placeholder="Select food preferences" allowClear>
+                            <Option value="Snacks">Snacks</Option>
+                            <Option value="Small Bites">Small Bites</Option>
+                            <Option value="Meals">Meals</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label="Enable Notifications"
+                        name="notifications"
+                        valuePropName="checked"
+                    >
+                        <Switch />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" loading={loading}>
+                            Update Profile
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Card>
         </div>
     );
 };
