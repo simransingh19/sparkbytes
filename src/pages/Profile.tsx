@@ -71,7 +71,7 @@ const Profile: React.FC = () => {
             <>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Card>
-                        <Card style={{ margin: '2vw' }}>
+                        <Card style={{ margin: '2vw'}}>
                             <Paragraph>
                                 If you have an account:
                             </Paragraph>
