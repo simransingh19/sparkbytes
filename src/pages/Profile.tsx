@@ -22,6 +22,7 @@ interface ProfileData {
     addresses: Address[];
     dietaryRestrictions: string[];
     foodPreferences: string[];
+    notifications: boolean;
 }
 
 const defaultProfileData: ProfileData = {
@@ -29,6 +30,7 @@ const defaultProfileData: ProfileData = {
     addresses: [],
     dietaryRestrictions: [],
     foodPreferences: [],
+    notifications: false,
 };
 
 const Profile: React.FC = () => {
@@ -56,6 +58,7 @@ const Profile: React.FC = () => {
                         addresses: data.UserData.Addresses || [],
                         dietaryRestrictions: data.UserData.DietaryRestrictions || [],
                         foodPreferences: data.UserData.FoodPreferences || [],
+                        notifications: data.UserData.Notifications || false, 
                     });
                 }
             };
@@ -157,6 +160,22 @@ const Profile: React.FC = () => {
                             </div>
                         </Card>
                     </div>
+                    <Title level={4}>Notifications: 
+          
+                        <div
+                            style={{
+                                display: 'inline-block',
+                                padding: '4px 9px',
+                                borderRadius: '20px',
+                                backgroundColor: profileData.notifications ? '#d9f7be' : '#ffd6e7',
+                                color: profileData.notifications ? '#389e0d' : '#cf1322',
+                                marginLeft: 10,
+                                textAlign: 'center',
+                            }}
+                        >
+                            {profileData.notifications ? 'On' : 'Off'}
+                        </div>
+                    </Title>
                 </Card>
             </div>
 
