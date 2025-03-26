@@ -1,5 +1,5 @@
 import React from 'react';
-import logoImage from '/Users/simransingh/Downloads/sparkbytes/src/assets/sparkBytesClear.png'
+import logoImage from '/src/assets/sparkBytesClear.png'
 
 const Home: React.FC = () => {
     return (
