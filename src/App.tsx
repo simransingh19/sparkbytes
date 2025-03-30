@@ -7,6 +7,8 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Profile from './pages/Profile';
 import UpdateProfile from "./pages/UpdateProfile.tsx";
+import EventsPage from "./pages/EventsPage.tsx";
+import HostEvent from "./pages/HostEvent.tsx";
 
 
 function App() {
@@ -19,6 +21,7 @@ function App() {
                       <li><Link to="/about">About</Link></li>
                       <li><Link to="/contact">Contact</Link></li>
                       <li><Link to="/profile">Profile</Link></li>
+                      <li><Link to="/eventspage">Events</Link></li>
                   </ul>
               </nav>
           </header>
@@ -29,6 +32,8 @@ function App() {
               <Route path="/contact" element={<Contact/>}/>
               <Route path="/profile" element={<Profile/>}/>
               <Route path="/update" element={<UpdateProfile/>}/>
+              <Route path="/eventspage" element={<EventsPage/>}/>
+              <Route path="/hostevent" element={<HostEvent/>}/>
           </Routes>
       </Router>
   )
