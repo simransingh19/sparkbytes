@@ -4,7 +4,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { getFirestore, addDoc, collection } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+//import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -12,11 +12,11 @@ const { Option } = Select;
 const HostEvent: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [_user, setUser] = useState<User | null>(null);
-    const [eventImageUrl, setEventImageUrl] = useState<string>('');
+    //const [eventImageUrl, setEventImageUrl] = useState<string>('');
     const db = getFirestore();
     const navigate = useNavigate();
     const [form] = Form.useForm();
-    const storage = getStorage();
+    //const storage = getStorage();
 
     // fills hoster and email fields from the authenticated user.
     useEffect(() => {
@@ -34,6 +34,7 @@ const HostEvent: React.FC = () => {
     }, [form]);
 
     // uploads image to firebase
+    /*
     const uploadImg = async ({ file, onSuccess, onError }: any) => {
         try {
             const storageRef = ref(storage, `eventImages/${Date.now()}_${file.name}`);
@@ -41,15 +42,24 @@ const HostEvent: React.FC = () => {
 
             uploadTask.on(
                 'state_changed',
-                () => {},
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log(`Upload progress: ${progress.toFixed(2)}%`);
+                },
                 (error) => {
                     console.error('Upload error:', error);
                     onError(error);
                 },
                 async () => {
-                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                    setEventImageUrl(downloadURL);
-                    onSuccess({ url: downloadURL });
+                    try {
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        console.log('Retrieved download URL:', downloadURL);
+                        setEventImageUrl(downloadURL);
+                        onSuccess({ url: downloadURL });
+                    } catch (downloadError) {
+                        console.error('Error retrieving download URL:', downloadError);
+                        onError(downloadError);
+                    }
                 }
             );
         } catch (error) {
@@ -58,13 +68,23 @@ const HostEvent: React.FC = () => {
         }
     };
 
+     */
+
     const handleSubmit = async (values: any) => {
         setLoading(true);
         try {
             const eventStart = values.eventStart.toDate();
             const eventEnd = values.eventEnd.toDate();
 
+            const auth = getAuth();
+            const currentUser = auth.currentUser;
+
+            if (!currentUser) {
+                throw new Error('User is not signed in.');
+            }
+
             const eventData = {
+                userId: currentUser.uid,
                 Hoster: values.hoster,
                 Email: values.email,
                 EventLocation: {
@@ -81,7 +101,7 @@ const HostEvent: React.FC = () => {
                     EventEnd: eventEnd,
                 },
                 EventDetails: values.eventDetails || '',
-                EventImage: eventImageUrl || '',
+                //EventImage: eventImageUrl || '',
             };
 
 
@@ -199,7 +219,8 @@ const HostEvent: React.FC = () => {
                     <Form.Item label="Event Description/Details" name="eventDetails">
                         <Input.TextArea rows={4} placeholder="Optional event details"/>
                     </Form.Item>
-
+                    
+                    {/*
                     <Form.Item label="Event Image (optional)">
                         <Upload customRequest={uploadImg} showUploadList={false}>
                             <Button icon={<UploadOutlined/>}>Upload Image</Button>
@@ -208,6 +229,7 @@ const HostEvent: React.FC = () => {
                             <img src={eventImageUrl} alt="Event" style={{marginTop: '10px', maxWidth: '100%'}}/>
                         )}
                     </Form.Item>
+                    */}
 
                     <Form.Item>
                         <Button type="primary" htmlType="submit" loading={loading}>
