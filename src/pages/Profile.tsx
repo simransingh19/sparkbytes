@@ -95,7 +95,7 @@ const Profile: React.FC = () => {
 
     return (
         <>
-            <div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}>
+            <div style={{display: 'flex', justifyContent: 'center', marginTop: 100}}>
                 <Card style={{width: '100%', textAlign: 'center'}}>
                     <Avatar
                         size={64}
