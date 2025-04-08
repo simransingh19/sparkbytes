@@ -9,7 +9,7 @@ import Profile from './pages/Profile';
 import UpdateProfile from "./pages/UpdateProfile.tsx";
 import EventsPage from "./pages/EventsPage.tsx";
 import HostEvent from "./pages/HostEvent.tsx";
-
+import EventDetailPage from "./pages/EventDetailPage.tsx";
 
 function App() {
   return (
@@ -34,6 +34,7 @@ function App() {
               <Route path="/update" element={<UpdateProfile/>}/>
               <Route path="/eventspage" element={<EventsPage/>}/>
               <Route path="/hostevent" element={<HostEvent/>}/>
+              <Route path="/eventdetail" element={<EventDetailPage />} />
           </Routes>
       </Router>
   )

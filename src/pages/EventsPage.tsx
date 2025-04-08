@@ -192,7 +192,7 @@ const EventsPage: React.FC = () => {
                                 bodyStyle={{ padding: '24px' }}
                             >
                                 <Title level={4} style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                                    {event.EventName || 'Untitled Event'}
+                                <Link to={`/eventdetail?id=${event.id}`}>{event.EventName}</Link>
                                 </Title>
 
                                 <div style={{ maxWidth: '90%', margin: '0 auto', textAlign: 'left' }}>
