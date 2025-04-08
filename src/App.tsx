@@ -12,6 +12,7 @@ import HostEvent from "./pages/HostEvent.tsx";
 import EventDetailPage from "./pages/EventDetailPage.tsx";
 
 function App() {
+    
   return (
       <Router>
           <header>

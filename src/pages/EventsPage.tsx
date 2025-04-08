@@ -150,7 +150,7 @@ const EventsPage: React.FC = () => {
 
     return (
         <>
-            <Card style={{ margin: '20px auto', width: '80%' }}>
+            <Card style={{ margin: '20px auto', marginTop: '10%', width: '80%' }}>
                 <Title level={2}>Events Page</Title>
                 <Paragraph>
                     Browse upcoming events below. Sign in if you’d like to host or attend an event!
@@ -170,7 +170,12 @@ const EventsPage: React.FC = () => {
             </Card>
 
             {user && (
-                <div style={{ width: '70%', margin: '0 auto', marginTop: '20px' }}>
+                <div style={{ 
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(2, 1fr)',
+                        gap: '20px',
+                        marginBottom: '30px' 
+                    }}>
                     {events.map((event) => {
                         let eventStart = '';
                         let eventEnd = '';
