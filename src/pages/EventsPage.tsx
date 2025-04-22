@@ -164,7 +164,7 @@ const EventsPage: React.FC = () => {
                 )}
                 {!user && (
                     <Button type="primary" onClick={signInWithGoogle}>
-                        You are not logged in. Click here to sign in with Google
+                        Click here to sign in with your BU Gmail
                     </Button>
                 )}
             </Card>

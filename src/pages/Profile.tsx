@@ -76,7 +76,7 @@ const Profile: React.FC = () => {
                                 If you have an account:
                             </Paragraph>
                             <Button onClick={signInWithGoogle}>
-                                Login with Google
+                                Login with your BU Gmail
                             </Button>
                         </Card>
                         <Card style={{ margin: '2vw' }}>
@@ -84,7 +84,7 @@ const Profile: React.FC = () => {
                                 First time here?
                             </Paragraph>
                             <Button onClick={signInWithGoogle}>
-                                Sign Up with Google
+                                Sign Up with your BU Gmail
                             </Button>
                         </Card>
                     </Card>
