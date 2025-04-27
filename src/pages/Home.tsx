@@ -167,16 +167,6 @@ const Home: React.FC = () => {
                 <h2>Check out some of our upcoming events!</h2>
             </div>
 
-            <div style={{
-                display: 'flex', justifyContent: 'flex-start',
-                marginBottom: '50px', paddingLeft: '10%'
-            }}>
-                <img
-                    src={logoImage}
-                    alt="SparkBytes Logo"
-                    style={{ width: '80%', display: 'block' }}
-                />
-            </div>
 
             <div style={{
                 fontFamily: "'Roboto Mono', monospace",

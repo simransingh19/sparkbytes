@@ -11,6 +11,8 @@ import {
   message,
   Carousel,
   Switch,
+  notification,
+  Pagination,
 } from "antd";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import {
@@ -63,6 +65,7 @@ interface EventData {
     EventEnd?: any;
   };
   FoodType?: string[];
+  RSVPs?: string[];
   userId?: string;
 }
 // arrows for carousel
@@ -119,13 +122,74 @@ const EventsPage: React.FC = () => {
     profileType: "",
   });
   const [events, setEvents] = useState<EventData[]>([]);
-  const [viewMode, setViewMode] = useState<"carousel" | "list">("carousel");
+  const [viewMode, setViewMode] = useState<"carousel" | "list">("list");
   const db = getFirestore();
 
   // logic for the editing of events within a modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<EventData | null>(null);
   const [editForm] = Form.useForm();
+
+  // logic for the list view
+  const [searchText, setSearchText] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 4; // Number of events per page
+
+  // Handle RSVP logic
+  const [api, contextHolder] = notification.useNotification();
+
+  const handleRSVP = async (eventId: string) => {
+    if (!user) {
+      message.warning("You must sign in to RSVP.");
+      return;
+    }
+
+    try {
+      const eventRef = doc(db, "Events", eventId);
+      const eventSnap = await getDoc(eventRef);
+      if (eventSnap.exists()) {
+        const eventData = eventSnap.data();
+        const currentRSVPs: string[] = eventData.RSVPs || [];
+        const userEmail = user.email || "";
+
+        let updatedRSVPs;
+        let actionType;
+
+        if (currentRSVPs.includes(userEmail)) {
+          updatedRSVPs = currentRSVPs.filter((email) => email !== userEmail);
+          actionType = "removed";
+        } else {
+          updatedRSVPs = [...currentRSVPs, userEmail];
+          actionType = "added";
+        }
+
+        await setDoc(eventRef, { ...eventData, RSVPs: updatedRSVPs });
+
+        setEvents((prevEvents) =>
+          prevEvents.map((event) =>
+            event.id === eventId ? { ...event, RSVPs: updatedRSVPs } : event
+          )
+        );
+
+        api.success({
+          message:
+            actionType === "added"
+              ? "RSVPed to Event"
+              : "Removed RSVP from Event",
+          description:
+            actionType === "added"
+              ? "You have successfully RSVPed."
+              : "You have removed your RSVP.",
+          placement: "topRight",
+          duration: 3,
+          showProgress: true,
+        });
+      }
+    } catch (error) {
+      console.error("Error RSVPing:", error);
+      message.error("Failed to update RSVP.");
+    }
+  };
 
   useEffect(() => {
     const auth = getAuth();
@@ -234,6 +298,8 @@ const EventsPage: React.FC = () => {
 
   return (
     <>
+      {/* // Notification for RSVP */}
+      {contextHolder}
       <Card style={{ margin: "20px auto", marginTop: "10%", width: "80%" }}>
         <Title level={2}>Events Page</Title>
         <Paragraph>
@@ -364,6 +430,17 @@ const EventsPage: React.FC = () => {
                             Edit Event
                           </Button>
                         )}
+                        {user && (
+                          <Button
+                            type="primary"
+                            style={{ marginTop: 8, marginLeft: 8 }}
+                            onClick={() => handleRSVP(event.id)}
+                          >
+                            {event.RSVPs?.includes(user.email || "")
+                              ? "RSVPed"
+                              : "RSVP"}
+                          </Button>
+                        )}
                       </div>
                     </Card>
                   </div>
@@ -372,111 +449,171 @@ const EventsPage: React.FC = () => {
             </Carousel>
           )}
 
-          {/* List view with original two-column grid widths */}
           {viewMode === "list" && (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: "20px",
-                marginBottom: "30px",
-              }}
-            >
-              {events.map((event) => {
-                let eventStart = "";
-                let eventEnd = "";
-                if (event.EventTimes?.EventStart?.toDate) {
-                  eventStart =
-                    event.EventTimes.EventStart.toDate().toLocaleString();
-                }
-                if (event.EventTimes?.EventEnd?.toDate) {
-                  eventEnd =
-                    event.EventTimes.EventEnd.toDate().toLocaleString();
-                }
-                return (
-                  <Card
-                    key={event.id}
-                    style={{
-                      marginBottom: "24px",
-                      border: "1px solid #f0f0f0",
-                      borderRadius: 8,
-                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
-                    }}
-                    bodyStyle={{ padding: "24px" }}
-                  >
-                    <Title
-                      level={4}
-                      style={{ textAlign: "center", marginBottom: "1rem" }}
-                    >
-                      <Link to={`/eventdetail?id=${event.id}`}>
-                        {event.EventName}
-                      </Link>
-                    </Title>
-
-                    <div
-                      style={{
-                        maxWidth: "90%",
-                        margin: "0 auto",
-                        textAlign: "left",
-                      }}
-                    >
-                      <Paragraph style={{ marginBottom: 8 }}>
-                        <UserOutlined style={{ marginRight: 8 }} />
-                        <strong>Host:</strong> {event.Hoster || "N/A"}
-                      </Paragraph>
-                      <Paragraph style={{ marginBottom: 8 }}>
-                        <MailOutlined style={{ marginRight: 8 }} />
-                        <strong>Contact:</strong> {event.Email}
-                      </Paragraph>
-                      {Array.isArray(event.FoodType) &&
-                        event.FoodType.length > 0 && (
-                          <Paragraph style={{ marginBottom: 8 }}>
-                            <RestOutlined style={{ marginRight: 8 }} />
-                            <strong>Food:</strong> {event.FoodType.join(", ")}
-                          </Paragraph>
-                        )}
-                      <Paragraph style={{ marginBottom: 8 }}>
-                        <CalendarOutlined style={{ marginRight: 8 }} />
-                        <strong>Start:</strong> {eventStart || "N/A"}
-                        <br />
-                        <strong>End:</strong> {eventEnd || "N/A"}
-                      </Paragraph>
-                      {event.EventLocation && (
-                        <Paragraph style={{ marginBottom: 8 }}>
-                          <EnvironmentOutlined style={{ marginRight: 8 }} />
-                          <strong>Location:</strong>
-                          <br />
-                          {event.EventLocation.street}
-                          {event.EventLocation.apt &&
-                            `, Apt: ${event.EventLocation.apt}`}
-                          <br />
-                          {event.EventLocation.city},{" "}
-                          {event.EventLocation.state}{" "}
-                          {event.EventLocation.zipcode}
-                          <br />
-                          {event.EventLocation.country}
-                        </Paragraph>
-                      )}
-                      {event.EventDetails && (
-                        <Paragraph style={{ marginBottom: 0 }}>
-                          <BarsOutlined style={{ marginRight: 8 }} />
-                          <strong>Details:</strong> {event.EventDetails}
-                        </Paragraph>
-                      )}
-                      {user && user.uid === event.userId && (
-                        <Button
-                          type="default"
-                          style={{ marginTop: 12 }}
-                          onClick={() => openEditModal(event)}
+            <>
+              {/* Search bar */}
+              <div
+                style={{
+                  marginBottom: "20px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Input.Search
+                  placeholder="Search events..."
+                  allowClear
+                  enterButton="Search"
+                  value={searchText}
+                  onChange={(e) => {
+                    setSearchText(e.target.value);
+                    setCurrentPage(1); // reset to page 1 when searching
+                  }}
+                  style={{
+                    maxWidth: 400,
+                  }}
+                />
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, minmax(400px, 1fr))",
+                  gap: "20px",
+                  marginBottom: "30px",
+                }}
+              >
+                {events
+                  .filter((event) =>
+                    event.EventName?.toLowerCase().includes(
+                      searchText.toLowerCase()
+                    )
+                  )
+                  .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+                  .map((event) => {
+                    let eventStart = "";
+                    let eventEnd = "";
+                    if (event.EventTimes?.EventStart?.toDate) {
+                      eventStart =
+                        event.EventTimes.EventStart.toDate().toLocaleString();
+                    }
+                    if (event.EventTimes?.EventEnd?.toDate) {
+                      eventEnd =
+                        event.EventTimes.EventEnd.toDate().toLocaleString();
+                    }
+                    return (
+                      <Card
+                        key={event.id}
+                        style={{
+                          marginBottom: "24px",
+                          border: "1px solid #f0f0f0",
+                          borderRadius: 8,
+                          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
+                        }}
+                        bodyStyle={{ padding: "24px" }}
+                      >
+                        <Title
+                          level={4}
+                          style={{ textAlign: "center", marginBottom: "1rem" }}
                         >
-                          Edit Event
-                        </Button>
-                      )}
-                    </div>
-                  </Card>
-                );
-              })}
-            </div>
+                          <Link to={`/eventdetail?id=${event.id}`}>
+                            {event.EventName}
+                          </Link>
+                        </Title>
+
+                        <div
+                          style={{
+                            maxWidth: "90%",
+                            margin: "0 auto",
+                            textAlign: "left",
+                          }}
+                        >
+                       
+                          <Paragraph style={{ marginBottom: 8 }}>
+                            <UserOutlined style={{ marginRight: 8 }} />
+                            <strong>Host:</strong> {event.Hoster || "N/A"}
+                          </Paragraph>
+                          <Paragraph style={{ marginBottom: 8 }}>
+                            <MailOutlined style={{ marginRight: 8 }} />
+                            <strong>Contact:</strong> {event.Email}
+                          </Paragraph>
+                          {Array.isArray(event.FoodType) &&
+                            event.FoodType.length > 0 && (
+                              <Paragraph style={{ marginBottom: 8 }}>
+                                <RestOutlined style={{ marginRight: 8 }} />
+                                <strong>Food:</strong>{" "}
+                                {event.FoodType.join(", ")}
+                              </Paragraph>
+                            )}
+                          <Paragraph style={{ marginBottom: 8 }}>
+                            <CalendarOutlined style={{ marginRight: 8 }} />
+                            <strong>Start:</strong> {eventStart || "N/A"}
+                            <br />
+                            <strong>End:</strong> {eventEnd || "N/A"}
+                          </Paragraph>
+                          {event.EventLocation && (
+                            <Paragraph style={{ marginBottom: 8 }}>
+                              <EnvironmentOutlined style={{ marginRight: 8 }} />
+                              <strong>Location:</strong>
+                              <br />
+                              {event.EventLocation.street}
+                              {event.EventLocation.apt &&
+                                `, Apt: ${event.EventLocation.apt}`}
+                              <br />
+                              {event.EventLocation.city},{" "}
+                              {event.EventLocation.state}{" "}
+                              {event.EventLocation.zipcode}
+                              <br />
+                              {event.EventLocation.country}
+                            </Paragraph>
+                          )}
+                          {event.EventDetails && (
+                            <Paragraph style={{ marginBottom: 0 }}>
+                              <BarsOutlined style={{ marginRight: 8 }} />
+                              <strong>Details:</strong> {event.EventDetails}
+                            </Paragraph>
+                          )}
+                          {user && user.uid === event.userId && (
+                            <Button
+                              type="default"
+                              style={{ marginTop: 12 }}
+                              onClick={() => openEditModal(event)}
+                            >
+                              Edit Event
+                            </Button>
+                          )}
+                          {user && (
+                            <Button
+                              type="primary"
+                              style={{ marginTop: 8, marginLeft: 8 }}
+                              onClick={() => handleRSVP(event.id)}
+                            >
+                              {event.RSVPs?.includes(user.email || "")
+                                ? "RSVPed"
+                                : "RSVP"}
+                            </Button>
+                          )}
+                        </div>
+                      </Card>
+                    );
+                  })}
+              </div>
+
+              {/* Pagination controls at the bottom */}
+              <div style={{ textAlign: "center", marginBottom: "30px" }}>
+                <Pagination
+                  current={currentPage}
+                  pageSize={pageSize}
+                  total={
+                    events.filter((event) =>
+                      event.EventName?.toLowerCase().includes(
+                        searchText.toLowerCase()
+                      )
+                    ).length
+                  }
+                  onChange={(page) => setCurrentPage(page)}
+                  showSizeChanger={false}
+                />
+              </div>
+            </>
           )}
         </>
       )}
