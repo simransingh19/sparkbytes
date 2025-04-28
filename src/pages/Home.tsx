@@ -80,7 +80,7 @@ const Home: React.FC = () => {
 
         mapInstance.current = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/dark-v11',
+            style: 'mapbox://styles/mapbox/navigation-night-v1',
             center: [-71.109, 42.351],
             zoom: 12,
         });
