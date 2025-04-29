@@ -13,7 +13,7 @@ import {
   LogoutOutlined,
   LoginOutlined,
 } from "@ant-design/icons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth";
 import NewEventListener from "./notifications/NewEventListener.tsx";
 import { notification } from "antd";
@@ -34,6 +34,11 @@ function AppContent() {
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
+  const hasMountedRef = useRef(false);
+
+  useEffect(() => {
+    hasMountedRef.current = true;
+  }, []);
 
   useEffect(() => {
     const auth = getAuth();
@@ -181,7 +186,7 @@ function AppContent() {
       </header>
 
       {contextHolder}
-      <NewEventListener notifyApi={api}/>
+      {hasMountedRef.current && <NewEventListener notifyApi={api} />}
 
       <Routes>
         <Route path="/" element={<Home />} />

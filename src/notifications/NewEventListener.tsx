@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { notification } from "antd";
 import type { NotificationInstance } from "antd/es/notification/interface";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -9,23 +9,11 @@ import {
   doc,
   getDoc,
   Timestamp,
-  QueryDocumentSnapshot,
-  DocumentData,
 } from "firebase/firestore";
 
-interface EventData {
-  id: string;
-  EventName: string;
-  EventTimes: {
-    EventStart: Timestamp;
-    EventEnd: Timestamp;
-  };
-  userId: string;
-}
+const notifiedEventIds = new Set<string>(); // ✅ persist across mounts
 
 const NewEventListener = ({ notifyApi }: { notifyApi: NotificationInstance }) => {
-  const [notifiedEventIds, setNotifiedEventIds] = useState<Set<string>>(new Set());
-
   useEffect(() => {
     const auth = getAuth();
     const db = getFirestore();
@@ -35,8 +23,8 @@ const NewEventListener = ({ notifyApi }: { notifyApi: NotificationInstance }) =>
 
       const userDocRef = doc(db, "Users", user.uid);
       const userDoc = await getDoc(userDocRef);
-      const notificationsOn = userDoc.exists() &&
-        userDoc.data()?.UserData?.Notifications === true;
+      const notificationsOn =
+        userDoc.exists() && userDoc.data()?.UserData?.Notifications === true;
 
       if (!notificationsOn) return;
 
@@ -45,8 +33,8 @@ const NewEventListener = ({ notifyApi }: { notifyApi: NotificationInstance }) =>
       const unsubscribeSnapshot = onSnapshot(eventsRef, (snapshot) => {
         const now = Timestamp.now();
 
-        const futureEvents: EventData[] = snapshot.docs
-          .map((docSnap: QueryDocumentSnapshot<DocumentData>) => {
+        const futureEvents = snapshot.docs
+          .map((docSnap) => {
             const data = docSnap.data();
             return {
               id: docSnap.id,
@@ -63,12 +51,10 @@ const NewEventListener = ({ notifyApi }: { notifyApi: NotificationInstance }) =>
 
         if (futureEvents.length === 0) return;
 
-        // Find the soonest timestamp
         const minTime = Math.min(
           ...futureEvents.map((e) => e.EventTimes.EventStart.seconds)
         );
 
-        // Get all events matching the soonest time
         const nextEvents = futureEvents.filter(
           (e) => e.EventTimes.EventStart.seconds === minTime
         );
@@ -79,16 +65,11 @@ const NewEventListener = ({ notifyApi }: { notifyApi: NotificationInstance }) =>
               message: "Upcoming Event!",
               description: `${event.EventName} is happening soon. Don't miss it!`,
               duration: 6,
-              placement: "topRight",
+              placement: "bottomRight",
             });
+            console.log("🔔 Notified for:", event.id);
+            notifiedEventIds.add(event.id);
           }
-        });
-
-        // Update state to avoid re-alerting
-        setNotifiedEventIds((prev) => {
-          const updated = new Set(prev);
-          nextEvents.forEach((e) => updated.add(e.id));
-          return updated;
         });
       });
 
