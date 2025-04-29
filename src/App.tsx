@@ -15,6 +15,8 @@ import {
 } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth";
+import NewEventListener from "./notifications/NewEventListener.tsx";
+import { notification } from "antd";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -31,6 +33,7 @@ const { Header } = Layout;
 function AppContent() {
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
+  const [api, contextHolder] = notification.useNotification();
 
   useEffect(() => {
     const auth = getAuth();
@@ -99,6 +102,7 @@ function AppContent() {
                 flex: 1,
                 justifyContent: "center",
                 borderBottom: "none",
+                marginRight: "80px"
               }}
             >
               <Menu.Item key="home" style={{ margin: "0 20px" }}>
@@ -175,6 +179,9 @@ function AppContent() {
           </div>
         </nav>
       </header>
+
+      {contextHolder}
+      <NewEventListener notifyApi={api}/>
 
       <Routes>
         <Route path="/" element={<Home />} />
