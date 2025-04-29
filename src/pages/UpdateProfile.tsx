@@ -96,6 +96,11 @@ const UpdateProfile: React.FC = () => {
             };
 
             await setDoc(userDocRef, dataToSave, { merge: true });
+
+            if (updatedData.notifications) {
+                localStorage.setItem('justEnabledNotifications', 'true');
+            }
+
             alert('Profile updated successfully!');
             navigate('/profile');
         } catch (error) {

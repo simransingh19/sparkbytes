@@ -20,6 +20,7 @@ import {
   getFirestore,
   doc,
   getDoc,
+  updateDoc,
   collection,
   addDoc,
   getDocs,
@@ -51,6 +52,7 @@ interface EventData {
   };
   FoodType?: string[];
   userId?: string;
+  foodCounter?: number;
 }
 
 interface UserLocation {
@@ -91,6 +93,16 @@ const EventDetailPage: React.FC = () => {
   // Set the Mapbox token directly
   const mapboxToken = "pk.eyJ1IjoieXVyaWJ5Y2hrb3YiLCJhIjoiY205ZDd2aTFnMHllZzJsb2Q3ZnFtZ213YSJ9.VUpx2g33DE11JKVF-Cw3AA";
 
+  const [foodCounter, setFoodCounter] = useState(0);
+  const [isHost, setIsHost] = useState(false);
+
+
+  useEffect(() => {
+    if (eventData?.foodCounter !== undefined) {
+      setFoodCounter(eventData.foodCounter);
+    }
+  }, [eventData]);
+
   // Get user's location
   useEffect(() => {
     if (navigator.geolocation) {
@@ -123,6 +135,10 @@ const EventDetailPage: React.FC = () => {
         if (eventSnap.exists()) {
           const data = eventSnap.data() as EventData;
           setEventData({ id: eventSnap.id, ...data });
+
+          if (data.userId && user?.uid) {
+            setIsHost(data.userId === user.uid); // <-- check if current user is the host
+          }
           
           // Geocode the event address to get coordinates
           if (data.EventLocation) {
@@ -341,6 +357,29 @@ const EventDetailPage: React.FC = () => {
     );
   }
 
+  // updating food counter
+  const updateFoodCounter = async (eventId: string, newCount: number) => {
+    const eventRef = doc(db, "Events", eventId);
+    await updateDoc(eventRef, {
+      foodCounter: newCount,
+    });
+  }
+  // handling food increments and decrements
+
+  const handleIncrement = async () => {
+    const newCount = foodCounter + 1;
+    setFoodCounter(newCount);
+    await updateFoodCounter(eventData.id, newCount);
+  };
+
+  const handleDecrement = async () => {
+    if (foodCounter > 0) {
+      const newCount = foodCounter - 1;
+      setFoodCounter(newCount);
+      await updateFoodCounter(eventData.id, newCount);
+    }
+  };
+
   return (
     <div style={{ paddingTop: "80px", maxWidth: 800, margin: "0 auto 20px auto" }}>
       {/* Event Details Section */}
@@ -348,6 +387,22 @@ const EventDetailPage: React.FC = () => {
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Paragraph>{eventData.EventDetails}</Paragraph>
+          </Col>
+
+          {/* Display food counter */}
+          <Col span={24}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+              <Text strong>Food Items Left:</Text>
+              <Text>{foodCounter}</Text>
+              {isHost && (
+                <Space>
+                  <Button onClick={handleIncrement}>Add Food</Button>
+                  <Button onClick={handleDecrement} disabled={foodCounter <= 0}>
+                    Remove Food
+                  </Button>
+                </Space>
+              )}
+            </div>
           </Col>
           
           <Col span={24}>
