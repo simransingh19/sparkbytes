@@ -165,23 +165,6 @@ const Home: React.FC = () => {
     //
 
     return (
-
-
-        // <div style={{overflowX: 'hidden'}}>
-        //     <div style= {{
-        //         height: '40vh',
-        //         display: 'flex',
-        //         flexDirection: 'column',
-        //         justifyContent: 'center',
-        //         alignItems: 'center',
-        //         background: 'linear-gradient(135deg, #001529 0%, #003366 100%)',
-        //         position: 'relative',
-        //     }}>
-
-
-
-
-        // original
         <div style={{
         }}
         >

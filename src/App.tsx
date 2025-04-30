@@ -88,7 +88,7 @@ function AppContent() {
               height: "80px",
             }}
           >
-            {/* Logo that links to home */}
+            {/* Logo that links to Home */}
             <div style={{ display: "flex", alignItems: "center" }}>
               <Link to="/">
                 <img
@@ -99,7 +99,7 @@ function AppContent() {
               </Link>
             </div>
 
-            {/* Menu items, centered horizontally */}
+            {/* Menu Items, Centered Horizontally */}
             <Menu
               mode="horizontal"
               style={{
@@ -148,7 +148,7 @@ function AppContent() {
               </Menu.Item>
             </Menu>
 
-            {/* Right Side of menu with profile icon */}
+            {/* Right Side of Menu with Profile Icon */}
             <div style={{ display: "flex", alignItems: "center" }}>
               {user ? (
                 <Dropdown

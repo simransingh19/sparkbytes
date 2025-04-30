@@ -11,7 +11,7 @@ import {
   Timestamp,
 } from "firebase/firestore";
 
-const notifiedEventIds = new Set<string>(); // ✅ persist across mounts
+const notifiedEventIds = new Set<string>(); // persist across mounts
 
 const NewEventListener = ({ notifyApi }: { notifyApi: NotificationInstance }) => {
   useEffect(() => {
