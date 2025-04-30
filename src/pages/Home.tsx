@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import {signInWithGoogle} from "../authentication.tsx";
 import {Button, Card} from "antd";
+import { DownCircleOutlined } from '@ant-design/icons'
 
 
 mapboxgl.accessToken = "pk.eyJ1IjoieXVyaWJ5Y2hrb3YiLCJhIjoiY205ZDd2aTFnMHllZzJsb2Q3ZnFtZ213YSJ9.VUpx2g33DE11JKVF-Cw3AA";
@@ -45,6 +46,7 @@ const Home: React.FC = () => {
     const [events, setEvents] = useState<EventData[]>([]);
     const navigate = useNavigate();
     const [user, setUser] = useState<User | null>(null);
+    const eventsSection = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         const auth = getAuth();
@@ -154,10 +156,99 @@ const Home: React.FC = () => {
         });
     }, [events, user, navigate]);
 
+    //
+
+    const scrollToEvents = () => {
+        eventsSection.current?.scrollIntoView( {behavior: 'smooth'});
+    };
+
+    //
+
     return (
-        <div style={{ color: '#6A0DAD', padding: '20px', marginTop: '20px' }}>
+
+
+        // <div style={{overflowX: 'hidden'}}>
+        //     <div style= {{
+        //         height: '40vh',
+        //         display: 'flex',
+        //         flexDirection: 'column',
+        //         justifyContent: 'center',
+        //         alignItems: 'center',
+        //         background: 'linear-gradient(135deg, #001529 0%, #003366 100%)',
+        //         position: 'relative',
+        //     }}>
+
+
+
+
+        // original
+        <div style={{
+        }}
+        >
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            padding: '0 20px'
+        }}>
+            <img
+                src={logoImage}
+                alt = "SparkBytes Logo"
+                style={{
+                    width: '100%',
+                    maxWidth: '10000px',
+                    marginTop: '70px',
+                    marginBottom: '40px',
+                    filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
+                }}
+            />
+
+        </div>
+
+        <div
+            style={{
+                position: 'absolute',
+                bottom: '30px',
+                cursor: 'pointer',
+                animation: 'bounce 2s infinite',
+                alignContent: 'center',
+                justifyContent: 'center',
+                position: 'relative'
+
+            }}
+            onClick={scrollToEvents}
+            
+            >
+                <DownCircleOutlined
+                    style={{
+                        fontSize: '24px',
+                        color: '#fff',
+
+                    }}
+                    onClick={() => navigate('/eventspage')}
+                />
+
+                <style jsx> {`
+                    @keyframes bounce {
+                        0%, 20%, 50%, 80%, 100%, {
+                            transform: translateY(0);
+                        }
+                        40% {
+                            transform: translateY(-15px);
+                        }
+                        60% {
+                            transform: translateY(-7px)};
+                        }
+                    }
+                `}</style>
+
+        </div>
+
+        <div style={{ color: 'white' , padding: '20px', marginTop: '20px' }}>
             <div style={{
-                fontFamily: "'Roboto Mono', monospace",
+                fontFamily: " Helvetica ",
                 marginTop: '50px'
             }}>
                 <h2>
@@ -169,14 +260,14 @@ const Home: React.FC = () => {
 
 
             <div style={{
-                fontFamily: "'Roboto Mono', monospace",
+                fontFamily: "'IBM Plex Mono', monospace",
                 textAlign: 'center',
             }}>
                 <h1>UPCOMING EVENTS</h1>
                 {!user && (
                     <Card style={{ margin: '20px auto', width: 300, textAlign: 'center' }}>
                         <p>Please sign in to view events on the map</p>
-                        <Button type="primary" onClick={signInWithGoogle}>
+                        <Button type="primary" onClick={signInWithGoogle} >
                             Sign in with BU Gmail
                         </Button>
                     </Card>
@@ -194,7 +285,9 @@ const Home: React.FC = () => {
                 }}
             />
         </div>
+        </div>
     );
+
 };
 
 export default Home;

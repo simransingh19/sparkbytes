@@ -17,7 +17,7 @@ nav {
   top: 0;
   left: 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(-45deg, #79aa2a, #169E89, #073730 );
+  background: linear-gradient(-45deg, #A8EC38, #169E89, #073730 );
   animation: gradient-animation 15s ease infinite;
 }
 
