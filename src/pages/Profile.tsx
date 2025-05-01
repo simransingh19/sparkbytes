@@ -4,7 +4,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { logout, signInWithGoogle } from "../authentication.tsx";
 import { Link } from "react-router-dom";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import {doc, getDoc, getFirestore, setDoc} from "firebase/firestore";
 
 const { Title, Paragraph } = Typography;
 
@@ -47,24 +47,35 @@ const Profile: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (user) {
-      const fetchProfileData = async () => {
-        const docRef = doc(db, 'Users', user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists() && docSnap.data().UserData) {
-          const data = docSnap.data();
-          const newProfile: ProfileData = {
-            profileType: data.profileType || '',
-            addresses: data.UserData.Addresses || [],
-            dietaryRestrictions: data.UserData.DietaryRestrictions || [],
-            foodPreferences: data.UserData.FoodPreferences || [],
-            notifications: data.UserData.Notifications || false,
-          };
-          setProfileData(newProfile);
-        }
-      };
-      fetchProfileData();
-    }
+    if (!user) return;
+    const docRef = doc(db, 'Users', user.uid);
+
+    (async () => {
+      const snap = await getDoc(docRef);
+      if (!snap.exists()) {
+        // First‐time user: create with default schema
+        await setDoc(docRef, {
+          UserData: {
+            Addresses:    [],
+            DietaryRestrictions: [],
+            FoodPreferences:     [],
+            Notifications:       false,
+          },
+          profileType: 'Attendee',
+        });
+        setProfileData(defaultProfileData);
+      } else {
+        // Existing user: load actual data
+        const data = snap.data()!;
+        setProfileData({
+          profileType: data.profileType || 'Attendee',
+          addresses:   data.UserData.Addresses,
+          dietaryRestrictions: data.UserData.DietaryRestrictions,
+          foodPreferences:     data.UserData.FoodPreferences,
+          notifications:       data.UserData.Notifications,
+        });
+      }
+    })();
   }, [user, db]);
 
   if (!user) {

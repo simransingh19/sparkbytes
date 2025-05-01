@@ -302,16 +302,35 @@ const EventsPage: React.FC = () => {
       {contextHolder}
       <Card style={{ margin: "20px auto", marginTop: "10%", width: "80%" }}>
         <Title level={2}>Events Page</Title>
-        <Paragraph>
-          Browse upcoming events below. Sign in if you’d like to host or attend
-          an event!
-        </Paragraph>
+        {!user && (
+          <Paragraph>
+            Browse upcoming events below. Sign in if you’d like to host or attend
+            an event!
+          </Paragraph>
+        )}
+        {user && profileData.profileType.toLowerCase() === "attendee" && (
+            <>
+            <Paragraph>
+              Browse upcoming events below. Register as a host if you'd like to post an event!
+            </Paragraph>
+            <Button type="primary" style={{marginRight: "1rem"}}>
+              <Link to="/hostapplication" style={{color: "#fff"}}>
+                Apply to be a Host
+              </Link>
+            </Button>
+            </>
+        )}
         {user && profileData.profileType.toLowerCase() === "host" && (
-          <Button type="primary" style={{ marginRight: "1rem" }}>
-            <Link to="/hostevent" style={{ color: "#fff" }}>
-              Host an Event
-            </Link>
-          </Button>
+            <>
+              <Paragraph>
+              Browse upcoming events below or host your own!
+              </Paragraph>
+              <Button type="primary" style={{marginRight: "1rem"}}>
+                <Link to="/hostevent" style={{color: "#fff"}}>
+                  Host an Event
+                </Link>
+              </Button>
+            </>
         )}
         {!user && (
           <Button type="primary" onClick={signInWithGoogle}>

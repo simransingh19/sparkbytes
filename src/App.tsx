@@ -27,6 +27,7 @@ import EventsPage from "./pages/EventsPage.tsx";
 import HostEvent from "./pages/HostEvent.tsx";
 import EventDetailPage from "./pages/EventDetailPage.tsx";
 import logoImage from "/src/assets/sparkBytes_teal_white_text_shadow 1.png";
+import HostApplicationPage from "./pages/HostApplicationPage.tsx";
 
 const { Header } = Layout;
 
@@ -197,6 +198,7 @@ function AppContent() {
         <Route path="/eventspage" element={<EventsPage />} />
         <Route path="/hostevent" element={<HostEvent />} />
         <Route path="/eventdetail" element={<EventDetailPage />} />
+        <Route path="/hostapplication" element={<HostApplicationPage />} />
       </Routes>
     </>
   );

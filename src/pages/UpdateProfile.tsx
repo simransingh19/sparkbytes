@@ -29,6 +29,7 @@ const UpdateProfile: React.FC = () => {
     const db = getFirestore();
     const [form] = Form.useForm();
     const navigate = useNavigate();
+    const [currentProfileType, setCurrentProfileType] = useState<string>('')
 
     useEffect(() => {
         const auth = getAuth();
@@ -39,6 +40,8 @@ const UpdateProfile: React.FC = () => {
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
                     const data = docSnap.data();
+                    const fetchedProfileType = data.profileType || '';
+                    setCurrentProfileType(fetchedProfileType);
                     const fetchedProfile: ProfileData = {
                         profileType: data.profileType || '',
                         addresses: (data.UserData?.Addresses && Array.isArray(data.UserData.Addresses))
@@ -115,7 +118,7 @@ const UpdateProfile: React.FC = () => {
             <Card style={{ width: 500, margin: '0 auto' }}>
                 <Form form={form} layout="vertical" onFinish={handleSubmit}>
                     <Form.Item label="Account Type" name="profileType" rules={[{ required: true }]}>
-                        <Select placeholder="Select Account Type">
+                        <Select placeholder="Select Account Type" disabled={currentProfileType !== 'Host'}>
                             <Select.Option value="Attendee">Attendee</Select.Option>
                             <Select.Option value="Host">Host</Select.Option>
                         </Select>
