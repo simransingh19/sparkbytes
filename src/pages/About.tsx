@@ -83,7 +83,7 @@ const About: React.FC = () => {
 
         <Title level={2}>Join Us</Title>
         <Paragraph>
-          Whether you're hosting an event or looking for a quick bite, Spark Bytes helps create a more connected and sustainable BU community.
+          Whether you're hosting an event or looking for a quick bite, join SparkBytes to help create a more connected and sustainable BU community.
         </Paragraph>
         <Paragraph>
           <i>SparkBytes is a project developed by students in CS391 at Boston University</i>
