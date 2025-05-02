@@ -1,7 +1,9 @@
-# sparkbytes
+# SparkBytes
 - By: CS391 Team 7 - Yuri Bychkov, Ethan Liu, Mario Hysa, Simran Singh
 
 SparkBytes is a web application dedicated to addressing two important challenges at Boston University: Food waste and community food insecurity. SparkBytes aims to reduce food waste and help members of the BU community access free, delicious food!
+
+Check out the website [here](https://681421597e29406dae061f0b--chic-griffin-d3de53.netlify.app/).
 
 ## React + TypeScript + Vite Framework Details
 
