@@ -1,7 +1,7 @@
 # SparkBytes
 By Yuri Bychkov, Ethan Liu, Mario Hysa, and Simran Singh 
 
-SparkBytes is a web application dedicated to addressing two important challenges at Boston University: Food waste from over-purchasing and community food access. SparkBytes aims to solve these by reducing food waste and help members of the BU community access free, delicious food!
+SparkBytes is a web application dedicated to addressing two important challenges at Boston University: Food waste from over-purchasing and community food access. SparkBytes aims to solve these problems by making it possible for members of the BU community to locate and pick up free, delicious food! 
 
 Check out the website [here](https://681421597e29406dae061f0b--chic-griffin-d3de53.netlify.app/).
 
