@@ -86,7 +86,10 @@ const About: React.FC = () => {
           Whether you're hosting an event or looking for a quick bite, join SparkBytes to help create a more connected and sustainable BU community.
         </Paragraph>
         <Paragraph>
-          <i>SparkBytes is a project developed by students in CS391 at Boston University</i>
+          Connect with us on Facebook. Twitter, or Instagram! 
+        </Paragraph>
+        <Paragraph>
+          <i>SparkBytes was developed by students in CS391 at Boston University</i>
         </Paragraph>
       </Typography>
     </div>

@@ -325,7 +325,7 @@ const EventsPage: React.FC = () => {
               <Paragraph>
               Browse upcoming events below or host your own!
               </Paragraph>
-              <Button type="primary" style={{marginRight: "1rem"}}>
+              <Button type="primary" style={{marginRight: "1rem"}} color="purple">
                 <Link to="/hostevent" style={{color: "#fff"}}>
                   Host an Event
                 </Link>

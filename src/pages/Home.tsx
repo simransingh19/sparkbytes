@@ -162,7 +162,7 @@ const Home: React.FC = () => {
         eventsSection.current?.scrollIntoView( {behavior: 'smooth'});
     };
 
-    //
+    {/* Landing Page Features + dynamic linked pointer */}
 
     return (
         <div style={{
@@ -234,9 +234,13 @@ const Home: React.FC = () => {
                 fontFamily: " Helvetica ",
                 marginTop: '50px'
             }}>
+                <h1>
+                    <i>
+                    Welcome to SparkBytes!
+                    </i>
+                </h1>
                 <h2>
-                    Welcome to SparkBytes! Our goal is to connect the BU Community
-                    with on‑campus events that are trying to eliminate food waste
+                Our goal is to connect the BU Community with on‑campus events that are trying to eliminate food waste
                 </h2>
                 <h2>Check out some of our upcoming events!</h2>
             </div>
