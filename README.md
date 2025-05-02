@@ -1,5 +1,5 @@
 # sparkbytes
-Team: SparkBites
+Team 7 
 
 ## React + TypeScript + Vite
 
