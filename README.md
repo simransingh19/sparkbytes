@@ -1,9 +1,19 @@
 # SparkBytes
-- By: CS391 Team 7 - Yuri Bychkov, Ethan Liu, Mario Hysa, Simran Singh
+By Yuri Bychkov, Ethan Liu, Mario Hysa, and Simran Singh 
 
-SparkBytes is a web application dedicated to addressing two important challenges at Boston University: Food waste and community food insecurity. SparkBytes aims to reduce food waste and help members of the BU community access free, delicious food!
+SparkBytes is a web application dedicated to addressing two important challenges at Boston University: Food waste from over-purchasnig and community food access. SparkBytes aims to solve these by reducing food waste and help members of the BU community access free, delicious food!
 
 Check out the website [here](https://681421597e29406dae061f0b--chic-griffin-d3de53.netlify.app/).
+
+## Architecture Overview
+
+Frontend 
+- SparkBytes was bootstrapped and built with create-vite + React + Typescript. The front end used the Ant Design library for responsive UI components.
+- We used Figma for UI wireframes and general visual design prototyping. 
+
+Backend
+- The backend used Firestore from Firebase to store event, user, and comment information and used Firebase Authentication to implement Google Sign-in, session tracking, and password recent functionality.
+- We also utilized the Mapbox API for event geolocation and user travel time calculation. 
 
 ## React + TypeScript + Vite Framework Details
 
