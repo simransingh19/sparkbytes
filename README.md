@@ -12,7 +12,7 @@ Frontend
 - We used Figma for UI wireframes and general visual design prototyping. 
 
 Backend
-- The backend used Firestore from Firebase to store event, user, and comment information and used Firebase Authentication to implement Google Sign-in, session tracking, and password recent functionality.
+- The backend used Firestore from Firebase to store event, user, and comment information and used Firebase Authentication to implement Google Sign-in via Google SSO, session tracking, and password recent functionality.
 - We also utilized the Mapbox API for event geolocation and user travel time calculation. Check out the Mapbox documentation [here](https://docs.mapbox.com/api/overview/).
 
 ## React + TypeScript + Vite Framework Details
