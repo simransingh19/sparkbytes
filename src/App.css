@@ -88,6 +88,46 @@ header {
   z-index: 1000;
 }
 
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(-45deg, #A8EC38, #169E89, #073730);
+  animation: gradient-animation 15s ease infinite;
+  padding: 1rem 0;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  color: white;
+  z-index: 1000;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.footer-text {
+  font-size: 14px;
+}
+
+.social-links {
+  display: flex;
+  gap: 15px;
+}
+
+.social-links a {
+  color: white;
+  font-size: 20px;
+  transition: opacity 0.2s;
+}
+
+.social-links a:hover {
+  opacity: 0.8;
+}
 
 
 .mapboxgl-popup-close-button {
