@@ -1,5 +1,5 @@
 # sparkbytes
-Team 7 
+- By: CS391 Team 7 - Yuri Bychkov, Ethan Liu, Mario Hysa, Simran Singh
 
 SparkBytes is a web application dedicated to addressing two important challenges at Boston University: Food waste and community food insecurity. SparkBytes aims to reduce food waste and help members of the BU community access free, delicious food!
 
