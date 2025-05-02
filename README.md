@@ -1,7 +1,9 @@
 # sparkbytes
 Team 7 
 
-## React + TypeScript + Vite
+SparkBytes is a web application dedicated to addressing two important challenges at Boston University: Food waste and community food insecurity. SparkBytes aims to reduce food waste and help members of the BU community access free, delicious food!
+
+## React + TypeScript + Vite Framework Details
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
